@@ -9,4 +9,7 @@ service RiskService {
 
     @readonly
     entity BusinessPartners as projection on rm.BusinessPartners;
+
+    @readonly
+    entity BusinessPartnerBanks as projection on rm.BusinessPartnerBanks;
 }

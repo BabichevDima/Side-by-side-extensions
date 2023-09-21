@@ -6,7 +6,7 @@ const cds = require("@sap/cds");
    */
 module.exports = cds.service.impl(async function () {
    // Define constants for the Risk and BusinessPartners entities from the risk-service.cds file
-   const { Risks, BusinessPartners } = this.entities;
+   const { Risks, BusinessPartners, BusinessPartnerBanks } = this.entities;
 
    /**
    * Set criticality after a READ operation on /risks
@@ -53,6 +53,22 @@ module.exports = cds.service.impl(async function () {
       // The API Sandbox returns alot of business partners with empty names.
       // We don't want them in our application
       req.query.where("LastName <> '' and FirstName <> '' ");
+      return await BPsrv.transaction(req).send({
+         query: req.query,
+         headers: {
+            apikey: process.env.apikey,
+         },
+      });
+   });
+
+   /**
+    * Event-handler for read-events on the BusinessPartnerBanks entity.
+    * Each request to the API Business Hub requires the apikey in the header.
+    */
+   this.on("READ", BusinessPartnerBanks, async (req) => {
+      // The API Sandbox returns alot of business partners with empty names.
+      // We don't want them in our application
+      req.query.where("BankName <> '' and BankNumber <> '' ");
       return await BPsrv.transaction(req).send({
          query: req.query,
          headers: {

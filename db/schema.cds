@@ -31,3 +31,9 @@ entity BusinessPartners as projection on external.A_BusinessPartner {
         LastName,
         FirstName
 }
+
+entity BusinessPartnerBanks as projection on external.A_BusinessPartnerBank {
+    key BusinessPartner,
+        BankName,
+        BankNumber
+}
